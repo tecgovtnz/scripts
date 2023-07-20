@@ -23,5 +23,5 @@ sudo apt install python3-pip --assume-yes
 sudo python3 -m venv venv
 sudo chown ZadockAllen /home/ZadockAllen --recursive
 
-# Install ansible and azure modules into virtual environment
-pip3 install -r https://raw.githubusercontent.com/tecdevgovtnz/scripts/main/ansible-util/requirements.txt
+# # Install ansible and azure modules into virtual environment
+# pip3 install -r https://sautilscript.blob.core.windows.net/githubrunner/requirements.txt
