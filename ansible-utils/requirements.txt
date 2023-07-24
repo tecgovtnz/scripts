@@ -52,4 +52,3 @@ azure-mgmt-iothub==0.7.0
 pygithub==1.59.0
 argparse==1.4.0
 pyjwt==2.4.0
-pyOpenSSL=23.2.0
