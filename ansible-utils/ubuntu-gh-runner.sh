@@ -33,5 +33,3 @@ tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
 # Last step, run it!
 ./svc.sh start
 ./svc.sh status
-
-cd ~
