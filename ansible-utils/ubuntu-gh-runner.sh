@@ -4,11 +4,6 @@ GITHUB_ORG_NAME=$1
 GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 
-mkdir /home/action-runner
-chown action-runner /home/action-runner --recursive
-chgrp action-runner /home/action-runner --recursive
-useradd -d /home/action-runner action-runner
-usermod -aG sudo action-runner
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -25,8 +20,12 @@ TOKEN=$(echo "$response" | jq -r '.token')
 echo "RUNNER_TOKEN=$TOKEN"
 
 # Install Github runner agent
-cd /usr/local/bin
+cd /usr/local/bin/
 mkdir actions-runner && cd actions-runner
+
+useradd -d /usr/local/bin/action-runner github-runner
+usermod -aG sudo github-runner
+
 echo "[---DEBUG1---]"
 # Download the latest runner package
 curl -o actions-runner-linux-x64-2.306.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.306.0/actions-runner-linux-x64-2.306.0.tar.gz
@@ -42,7 +41,7 @@ export RUNNER_ALLOW_RUNASROOT=1
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
-./svc.sh install action-runner
+./svc.sh install github-runner
 echo "[---DEBUG6---]"
 # Last step, run it!
 ./svc.sh start
