@@ -1,9 +1,6 @@
 #!/bin/bash
 # This file should be sourced
 
-# Change directory to user home
-cd ~
-
 # Upgrade all packages that have available updates and remove old ones.
 sudo apt-get update
 sudo apt upgrade -y
