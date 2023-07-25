@@ -23,8 +23,8 @@ echo "RUNNER_TOKEN=$TOKEN"
 mkdir /usr/local/bin/actions-runner
 cd /usr/local/bin/actions-runner
 
-sudo chown github-runner /usr/local/bin/actions-runner --recursive
-sudo chgrp github-runner /usr/local/bin/actions-runner --recursive
+chown github-runner /usr/local/bin/actions-runner --recursive
+chgrp github-runner /usr/local/bin/actions-runner --recursive
 useradd -d /usr/local/bin/actions-runner github-runner
 usermod -aG sudo github-runner
 
