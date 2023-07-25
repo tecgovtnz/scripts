@@ -23,10 +23,10 @@ echo "RUNNER_TOKEN=$TOKEN"
 mkdir /usr/local/bin/actions-runner
 cd /usr/local/bin/actions-runner
 
-chown github-runner /usr/local/bin/actions-runner --recursive
-chgrp github-runner /usr/local/bin/actions-runner --recursive
-useradd -d /usr/local/bin/actions-runner github-runner
-usermod -aG sudo github-runner
+chown action-runner /usr/local/bin/actions-runner --recursive
+chgrp action-runner /usr/local/bin/actions-runner --recursive
+useradd -d /usr/local/bin/actions-runner action-runner
+usermod -aG sudo action-runner
 
 echo "[---DEBUG1---]"
 # Download the latest runner package
@@ -43,7 +43,7 @@ export RUNNER_ALLOW_RUNASROOT=1
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
-./svc.sh install github-runner
+./svc.sh install action-runner
 echo "[---DEBUG6---]"
 # Last step, run it!
 ./svc.sh start
