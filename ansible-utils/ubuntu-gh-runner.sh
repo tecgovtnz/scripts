@@ -18,6 +18,7 @@ echo "response=$response"
 TOKEN=$(echo "$response" | jq -r '.token')
 echo "RUNNER_TOKEN=$TOKEN"
 # Install Github runner agent
+cd /usr/local/bin
 mkdir actions-runner && cd actions-runner
 echo "[---DEBUG1---]"
 # Download the latest runner package
