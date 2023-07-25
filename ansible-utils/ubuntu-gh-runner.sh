@@ -35,7 +35,7 @@ export RUNNER_ALLOW_RUNASROOT=1
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
-./svc.sh install action-runner
+./svc.sh install ZadockAllen
 echo "[---DEBUG6---]"
 # Last step, run it!
 ./svc.sh start
