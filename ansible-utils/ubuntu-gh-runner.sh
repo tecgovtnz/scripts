@@ -4,6 +4,11 @@ GITHUB_ORG_NAME=$1
 GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 
+mkdir /home/action-runner
+chown action-runner /home/action-runner --recursive
+chgrp action-runner /home/action-runner --recursive
+useradd -d /home/action-runner action-runner
+
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
 ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID -p "$GITHUB_APP_PRIVATE_KEY")
@@ -17,6 +22,7 @@ echo "response=$response"
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
 echo "RUNNER_TOKEN=$TOKEN"
+
 # Install Github runner agent
 cd /usr/local/bin
 mkdir actions-runner && cd actions-runner
@@ -35,7 +41,7 @@ export RUNNER_ALLOW_RUNASROOT=1
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
-./svc.sh install ZadockAllen
+./svc.sh install action-runner
 echo "[---DEBUG6---]"
 # Last step, run it!
 ./svc.sh start
