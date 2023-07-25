@@ -31,7 +31,7 @@ tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
 echo "[---DEBUG4---]"
 # Create the runner and start the configuration experience
 export RUNNER_ALLOW_RUNASROOT=1
-./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runnergroup Default --labels Linux
+./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
 ./svc.sh install action-runner
