@@ -7,7 +7,7 @@ GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
 ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID -p "$GITHUB_APP_PRIVATE_KEY")
-echo TOKEN=$ACCESS_TOKEN
+echo ACCESS_TOKEN=$ACCESS_TOKEN
 # Generate the GitHub runner token
 response=$(curl -X POST \
   -H "Authorization: token $ACCESS_TOKEN" \
