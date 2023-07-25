@@ -12,8 +12,8 @@ echo ACCESS_TOKEN=$ACCESS_TOKEN
 response=$(curl -X POST \
   -H "Authorization: token $ACCESS_TOKEN" \
   -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/orgs/$ORG_NAME/actions/runners/registration-token")
-
+  "https://api.github.com/orgs/$GITHUB_ORG_NAME/actions/runners/registration-token")
+echo "response=$response"
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
 echo "RUNNER_TOKEN=$TOKEN"
