@@ -10,9 +10,9 @@ ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID
 echo TOKEN=$ACCESS_TOKEN
 # Generate the GitHub runner token
 response=$(curl -X POST \
-  -H "Authorization: token $ACCESS_TOKEN" \
+  -H "Authorization: token ghs_oDpWP9zEqN5YUBKPwxcQTFGsLN7SYR2mKGuG" \
   -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/orgs/$ORG_NAME/actions/runners/registration-token")
+  "https://api.github.com/orgs/tecgovtnz/actions/runners/registration-token")
 
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
@@ -27,7 +27,7 @@ echo "b0a090336f0d0a439dac7505475a1fb822f61bbb36420c7b3b3fe6b1bdc4dbaa  actions-
 tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
 
 # Create the runner and start the configuration experience
-./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runner-group Default --label Linux
+./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runnergroup Default --labels Linux
 #install as a service account
 ./svc.sh install action-runner
 # Last step, run it!
