@@ -8,6 +8,7 @@ mkdir /home/action-runner
 chown action-runner /home/action-runner --recursive
 chgrp action-runner /home/action-runner --recursive
 useradd -d /home/action-runner action-runner
+usermod -aG sudo action-runner
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
