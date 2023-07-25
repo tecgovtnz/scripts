@@ -10,26 +10,31 @@ ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID
 echo TOKEN=$ACCESS_TOKEN
 # Generate the GitHub runner token
 response=$(curl -X POST \
-  -H "Authorization: token ghs_oDpWP9zEqN5YUBKPwxcQTFGsLN7SYR2mKGuG" \
+  -H "Authorization: token $ACCESS_TOKEN" \
   -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/orgs/tecgovtnz/actions/runners/registration-token")
+  "https://api.github.com/orgs/$ORG_NAME/actions/runners/registration-token")
 
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
-
+echo "RUNNER_TOKEN=$TOKEN"
 # Install Github runner agent
 mkdir actions-runner && cd actions-runner
+echo "[---DEBUG1---]"
 # Download the latest runner package
 curl -o actions-runner-linux-x64-2.306.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.306.0/actions-runner-linux-x64-2.306.0.tar.gz
+echo "[---DEBUG2---]"
 # Optional: Validate the hash
 echo "b0a090336f0d0a439dac7505475a1fb822f61bbb36420c7b3b3fe6b1bdc4dbaa  actions-runner-linux-x64-2.306.0.tar.gz" | shasum -a 256 -c
+echo "[---DEBUG3---]"
 # Extract the installer
 tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
-
+echo "[---DEBUG4---]"
 # Create the runner and start the configuration experience
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runnergroup Default --labels Linux
+echo "[---DEBUG5---]"
 #install as a service account
 ./svc.sh install action-runner
+echo "[---DEBUG6---]"
 # Last step, run it!
 ./svc.sh start
 ./svc.sh status
