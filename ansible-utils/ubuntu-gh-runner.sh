@@ -20,7 +20,8 @@ TOKEN=$(echo "$response" | jq -r '.token')
 echo "RUNNER_TOKEN=$TOKEN"
 
 # Install Github runner agent
-cd /usr/local/bin/ && mkdir actions-runner && cd actions-runner
+mkdir /usr/local/bin/actions-runner
+cd /usr/local/bin/actions-runner
 
 useradd -d /usr/local/bin/actions-runner github-runner
 usermod -aG sudo github-runner
