@@ -43,6 +43,11 @@ export RUNNER_ALLOW_RUNASROOT=1
 ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
 echo "[---DEBUG5---]"
 #install as a service account
+
+#change owner and group again due to there are some file update after run config.sh
+chown action-runner /usr/local/bin/actions-runner --recursive
+chgrp action-runner /usr/local/bin/actions-runner --recursive
+
 ./svc.sh install action-runner
 echo "[---DEBUG6---]"
 # Last step, run it!
