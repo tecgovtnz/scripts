@@ -8,6 +8,7 @@ sudo apt autoremove --assume-yes
 
 # Install git
 sudo apt install git --assume-yes
+sudo apt install -y jq
 
 # Install azcli
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
