@@ -38,7 +38,7 @@ tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
 
 # Create the runner and start the configuration experience
 export RUNNER_ALLOW_RUNASROOT=1
-./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work ~/_work --runnergroup Default --labels Linux
+./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runnergroup Default --labels Linux
 #install as a service account
 
 #change owner and group again due to there are some file update after run config.sh
