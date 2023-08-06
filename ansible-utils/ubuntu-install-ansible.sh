@@ -24,6 +24,7 @@ sudo chown ZadockAllen /home/ZadockAllen --recursive
 pip3 install -r requirements.txt
 
 ansible-galaxy collection install community.general
+ansible-galaxy collection install microsoft.ad
 
 wget https://files.pythonhosted.org/packages/f0/e2/f8b4f1c67933a4907e52228241f4bd52169f3196b70af04403b29c63238a/pyOpenSSL-23.2.0-py3-none-any.whl
 python3 -m easy_install pyOpenSSL-23.2.0-py3-none-any.whl
