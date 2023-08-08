@@ -6,12 +6,6 @@ sudo apt-get update
 sudo apt upgrade -y
 sudo apt autoremove --assume-yes
 
-# update python 3.11
-sudo apt install build-essential checkinstall libreadline-gplv2-dev  libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt install python3.11
-curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
-
 # Install git
 sudo apt install git --assume-yes
 sudo apt install -y jq
