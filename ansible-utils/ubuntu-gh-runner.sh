@@ -3,7 +3,7 @@
 GITHUB_ORG_NAME=$1
 GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
-
+ENVIRONMENT=$4
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -38,7 +38,8 @@ tar xzf ./actions-runner-linux-x64-2.306.0.tar.gz
 
 # Create the runner and start the configuration experience
 export RUNNER_ALLOW_RUNASROOT=1
-./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $(hostname) --work _work --runnergroup Default --labels Linux
+[[ "$ENVIRONMENT" == "dev" ]] && RUNNER_NAME=$(hostname)-$ENVIRONMENT || RUNNER_NAME=$(hostname)
+./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT
 #install as a service account
 
 #change owner and group again due to there are some file update after run config.sh
