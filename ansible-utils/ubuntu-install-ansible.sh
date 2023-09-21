@@ -1,6 +1,8 @@
 #!/bin/bash
 # This file should be sourced
 
+USERNAME=$1
+
 # Upgrade all packages that have available updates and remove old ones.
 sudo apt-get update
 sudo apt upgrade -y
@@ -19,7 +21,7 @@ sudo apt install python3-pip --assume-yes
 
 # Setup virtual environment and push home folder ownership
 sudo python3 -m venv venv
-sudo chown ZadockAllen /home/ZadockAllen --recursive
+sudo chown $USERNAME /home/$USERNAME --recursive
 
 # Install ansible and azure modules into virtual environment
 pip3 install -r requirements.txt
