@@ -18,10 +18,13 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 # Install venv and pip
 sudo apt install python3-venv --assume-yes
 sudo apt install python3-pip --assume-yes
-
+ 
 # Setup virtual environment and push home folder ownership
 sudo python3 -m venv venv
 sudo chown $USERNAME /home/$USERNAME --recursive
+
+# Install packages
+sudo apt install sshpass
 
 # Install ansible and azure modules into virtual environment
 pip3 install -r requirements.txt
