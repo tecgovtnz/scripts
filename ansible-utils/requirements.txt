@@ -43,7 +43,10 @@ azure-mgmt-resource
 azure-mgmt-rdbms
 azure-mgmt-servicebus
 azure-mgmt-sql
-azure-mgmt-storage
+azure-storage-blob
+azure-storage-file-share
+azure-storage-file-datalake
+azure-storage-queue
 azure-mgmt-trafficmanager
 azure-mgmt-web
 azure-nspkg
