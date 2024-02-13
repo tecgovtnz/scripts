@@ -54,3 +54,4 @@ pygithub==1.59.0
 argparse==1.4.0
 pyjwt==2.4.0
 pypsrp
+pyOpenSSL==23.2.0
