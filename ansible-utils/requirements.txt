@@ -50,7 +50,6 @@ azure-storage-queue
 azure-mgmt-trafficmanager
 azure-mgmt-web
 azure-nspkg
-azure-storage
 msrest
 msrestazure
 pygithub
