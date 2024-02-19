@@ -20,23 +20,12 @@ TOKEN=$(echo "$response" | jq -r '.token')
 
 
 # Install Github runner agent
-# mkdir /usr/local/bin/actions-runner
-# cd /usr/local/bin/actions-runner
 cd /opt/runner-cache
 
-
-# chown action-runner /usr/local/bin/actions-runner --recursive
-# chgrp action-runner /usr/local/bin/actions-runner --recursive
-# useradd -d /usr/local/bin/actions-runner action-runner
-# usermod -aG sudo action-runner
 chown action-runner /opt/runner-cache --recursive
 chgrp action-runner /opt/runner-cache --recursive
 useradd -d /opt/runner-cache action-runner
 usermod -aG sudo action-runner
-
-
-# Download the latest runner package
-# curl -o actions-runner-linux-x64-2.306.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.306.0/actions-runner-linux-x64-2.306.0.tar.gz
 
 # Optional: Validate the hash
 # echo "b0a090336f0d0a439dac7505475a1fb822f61bbb36420c7b3b3fe6b1bdc4dbaa  actions-runner-linux-x64-2.306.0.tar.gz" | shasum -a 256 -c
@@ -52,11 +41,11 @@ tar xzf ./actions-runner-linux*.tar.gz
 # install as a service account
 
 # change owner and group again due to there are some file update after run config.sh
-# chown action-runner /usr/local/bin/actions-runner --recursive
-# chgrp action-runner /usr/local/bin/actions-runner --recursive
-
 chown action-runner /opt/runner-cache --recursive
 chgrp action-runner /opt/runner-cache --recursive
+
+# add runner user to docker group
+usermod -aG docker action-runner
 
 ./svc.sh install action-runner
 # Last step, run it!
