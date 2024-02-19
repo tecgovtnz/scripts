@@ -42,6 +42,11 @@ chown action-runner /opt/runner-cache --recursive
 chgrp action-runner /opt/runner-cache --recursive
 
 
+
+# Add runner user to docker group
+sudo usermod -aG docker action-runner
+
+
 ./svc.sh install action-runner
 # Last step, run it!
 ./svc.sh start
