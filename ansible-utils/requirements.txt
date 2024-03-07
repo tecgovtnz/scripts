@@ -2,7 +2,4 @@ argparse
 pyOpenSSL
 pygithub
 pywinrm
-ansible
-ansible-lint
-ansible-core
 sshpass-wrapper
