@@ -47,6 +47,10 @@ chgrp action-runner /opt/runner-cache --recursive
 sudo usermod -aG docker action-runner
 
 
+#install the requirements file from the azure collection as the action-runner user.
+sudo su - action-runner -c "pip3 install -r '/opt/pipx/venvs/ansible-core/lib/python3.1*/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt'"
+
+
 ./svc.sh install action-runner
 # Last step, run it!
 ./svc.sh start
