@@ -10,6 +10,7 @@ sudo apt install -y python-argparse
 
 
 python --version
+ansible --version
 
 
 installpath=$(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")
