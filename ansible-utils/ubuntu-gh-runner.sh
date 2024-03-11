@@ -55,21 +55,3 @@ sudo su - action-runner -c "pip3 install -r '/opt/pipx/venvs/ansible-core/lib/py
 # Last step, run it!
 ./svc.sh start
 ./svc.sh status
-
-
-
-
-
-
-sudo apt-get update
-sudo apt install -y python3-github
-sudo apt install -y python-argparse
-
-
-installpath=$(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")
-patharray=($installpath)
-
-
-# install ansible collections
-ansible-galaxy collection install -p ${patharray[1]} -r collection-requirements.yml --force
-ansible-galaxy collection install
