@@ -53,6 +53,8 @@ sudo usermod -aG docker action-runner
 #install the requirements file from the azure collection as the action-runner user.
 sudo su - action-runner -c "pip3 install -r $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt")"
 
+#set path for action-runner user
+echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
 ./svc.sh install action-runner
 # Last step, run it!
