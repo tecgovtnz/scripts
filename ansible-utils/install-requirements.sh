@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sudo apt-get update
-sudo apt install -y python3-github
-sudo apt install -y python-argparse
+#sudo apt-get update
+#sudo apt install -y python3-github
+#sudo apt install -y python-argparse
 
 
 # install requirements for runner registration
@@ -11,6 +11,7 @@ sudo apt install -y python-argparse
 
 python --version
 ansible --version
+env
 
 
 installpath=$(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")
