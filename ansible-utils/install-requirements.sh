@@ -18,9 +18,10 @@ ansible --version
 
 
 installpath=$(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")
-patharray=($installpath)
+#patharray=($installpath)
 
 
 # install ansible collections
-ansible-galaxy collection install -p ${patharray[1]} -r collection-requirements.yml --force
+#ansible-galaxy collection install -p ${patharray[1]} -r collection-requirements.yml --force
+ansible-galaxy collection install -p $installpath -r collection-requirements.yml --force
 ansible-galaxy collection install
