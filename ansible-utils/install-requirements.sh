@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#sudo apt-get update
-#sudo apt install -y python3-github
-#sudo apt install -y python-argparse
+sudo apt-get update
+sudo apt install -y python3-github
+sudo apt install -y python-argparse
 
 
 # install requirements for runner registration
