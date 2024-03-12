@@ -5,8 +5,8 @@ GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
-USR1=ZadockAllen
-PATH=/snap/bin:/home/$USR1/.local/bin:/opt/pipx_bin:/home/$USR1/.cargo/bin:/home/$USR1/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/$USR1/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/$USR1/.dotnet/tools
+#USR1=ZadockAllen
+#PATH=/snap/bin:/home/$USR1/.local/bin:/opt/pipx_bin:/home/$USR1/.cargo/bin:/home/$USR1/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/$USR1/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/$USR1/.dotnet/tools
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -51,7 +51,7 @@ sudo usermod -aG docker action-runner
 
 
 #install the requirements file from the azure collection as the action-runner user.
-sudo su - action-runner -c "pip3 install -r '/opt/pipx/venvs/ansible-core/lib/python3.1*/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt'"
+sudo su - action-runner -c "pip3 install -r $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt")"
 
 
 ./svc.sh install action-runner
