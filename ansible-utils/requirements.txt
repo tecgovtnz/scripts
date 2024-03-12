@@ -1,5 +1,5 @@
 argparse
-pyOpenSSL
+#pyOpenSSL
 pygithub
-pywinrm
-sshpass-wrapper
+#pywinrm
+#sshpass-wrapper
