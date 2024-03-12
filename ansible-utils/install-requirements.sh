@@ -10,8 +10,9 @@
 
 
 python --version
-ansible --version
 env
+echo $PATH
+ansible --version
 
 
 installpath=$(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")
