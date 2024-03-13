@@ -4,6 +4,7 @@
 #sudo apt install -y python3-github
 #sudo apt install -y python-argparse
 
+whoami
 
 # install requirements for runner registration
 pip3 install -r requirements.txt
