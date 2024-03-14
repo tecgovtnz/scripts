@@ -51,7 +51,8 @@ sudo usermod -aG docker action-runner
 
 
 #install the requirements file from the azure collection as the action-runner user.
-sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection --upgrade -p $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections")"
+sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
+sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
 sudo su - action-runner -c "pip3 install -r $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt")"
 
 #set path for action-runner user
