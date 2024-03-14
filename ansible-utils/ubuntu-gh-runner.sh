@@ -52,14 +52,16 @@ chgrp action-runner /opt/runner-cache --recursive
 sudo usermod -aG docker action-runner
 
 #set path for action-runner user
-#echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
+echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
 # Install ansible collections and requirements
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
 sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows"
-sudo su - action-runner -c "pip3 install -r /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt"
-sudo su - action-runner -c "pip3 install pywinrm"
+#sudo su - action-runner -c "pip3 install -r /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt"
+#sudo su - action-runner -c "pip3 install pywinrm"
+cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core
+pipx inject ansible-core pywinrm
 
 ./svc.sh install action-runner
 # Last step, run it!
