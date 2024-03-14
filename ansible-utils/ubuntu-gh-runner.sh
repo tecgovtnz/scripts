@@ -5,6 +5,10 @@ GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
+# Install the requirements for the GitHub authentication
+#pip3 install -r github-runner-requirements.txt
+pip3 install pygithub
+
 #USR1=ZadockAllen
 #PATH=/snap/bin:/home/$USR1/.local/bin:/opt/pipx_bin:/home/$USR1/.cargo/bin:/home/$USR1/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/$USR1/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/$USR1/.dotnet/tools
 
@@ -44,16 +48,8 @@ tar xzf ./actions-runner-linux*.tar.gz
 chown action-runner /opt/runner-cache --recursive
 chgrp action-runner /opt/runner-cache --recursive
 
-
-
 # Add runner user to docker group
 sudo usermod -aG docker action-runner
-
-
-#install the requirements file from the azure collection as the action-runner user.
-sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
-sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
-sudo su - action-runner -c "pip3 install -r $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure/azcollection/requirements-azure.txt")"
 
 #set path for action-runner user
 #echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
