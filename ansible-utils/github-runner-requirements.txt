@@ -1,6 +1,0 @@
-argparse
-#pyOpenSSL
-pygithub
-#pywinrm
-#sshpass-wrapper
-ansible-core

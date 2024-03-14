@@ -6,11 +6,7 @@ GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
-#pip3 install -r github-runner-requirements.txt
 pip3 install pygithub
-
-#USR1=ZadockAllen
-#PATH=/snap/bin:/home/$USR1/.local/bin:/opt/pipx_bin:/home/$USR1/.cargo/bin:/home/$USR1/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/$USR1/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/$USR1/.dotnet/tools
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -58,8 +54,6 @@ echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
 sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows"
-#sudo su - action-runner -c "pip3 install -r /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt"
-#sudo su - action-runner -c "pip3 install pywinrm"
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm"
 
