@@ -5,6 +5,9 @@ GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
+# Install the requirements for the GitHub authentication
+pip3 install pygithub
+
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
 ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID -p "$GITHUB_APP_PRIVATE_KEY")
@@ -41,11 +44,18 @@ tar xzf ./actions-runner-linux*.tar.gz
 chown action-runner /opt/runner-cache --recursive
 chgrp action-runner /opt/runner-cache --recursive
 
-
-
 # Add runner user to docker group
 sudo usermod -aG docker action-runner
 
+#set path for action-runner user
+echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
+
+# Install ansible collections and requirements
+sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
+sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
+sudo su - action-runner -c "ansible-galaxy collection install ansible.windows"
+sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
+sudo su - action-runner -c "pipx inject ansible-core pywinrm"
 
 ./svc.sh install action-runner
 # Last step, run it!
