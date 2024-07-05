@@ -24,10 +24,10 @@ TOKEN=$(echo "$response" | jq -r '.token')
 # Install Github runner agent
 cd /opt/runner-cache
 
-chown action-runner /opt/runner-cache --recursive
-chgrp action-runner /opt/runner-cache --recursive
 useradd -d /opt/runner-cache action-runner
 usermod -aG sudo action-runner
+chown action-runner /opt/runner-cache --recursive
+chgrp action-runner /opt/runner-cache --recursive
 
 # Extract the installer
 tar xzf ./actions-runner-linux*.tar.gz
@@ -54,7 +54,7 @@ echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
 sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows"
-sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
+sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub"
 pip install PyGithub
 
