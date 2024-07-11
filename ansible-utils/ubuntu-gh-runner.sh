@@ -52,9 +52,9 @@ echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner
 
 # Install ansible collections and requirements
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
-sudo su - action-runner -c "ansible-galaxy collection install azure.azcollection"
-sudo su - action-runner -c "ansible-galaxy collection install ansible.windows"
-sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
+sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/ansible/windows") # Delete existing windows collection
+sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==2.4.0 azure.azcollection:==2.3.0" # Pin older collection versions
+sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub"
 pip install PyGithub
 
