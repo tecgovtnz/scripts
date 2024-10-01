@@ -35,7 +35,16 @@ tar xzf ./actions-runner-linux*.tar.gz
 
 # Create the runner and start the configuration experience
  export RUNNER_ALLOW_RUNASROOT=1
- [[ "$ENVIRONMENT" == "dev" ]] && RUNNER_NAME=$(hostname)-$ENVIRONMENT || RUNNER_NAME=$(hostname)
+# [[ "$ENVIRONMENT" == "dev" ]] && RUNNER_NAME=$(hostname)-$ENVIRONMENT || RUNNER_NAME=$(hostname)
+
+ if [[ "$ENVIRONMENT" == "dev" || "$ENVIRONMENT" == "dev-platform" ]]; then
+    RUNNER_NAME=$(hostname)-$ENVIRONMENT
+elif [[ "$ENVIRONMENT" == "prod-platform" ]]; then
+    RUNNER_NAME=$(hostname)-platform
+else
+    RUNNER_NAME=$(hostname)
+fi
+
  ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT
 # install as a service account
 
