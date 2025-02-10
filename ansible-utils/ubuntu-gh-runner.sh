@@ -44,7 +44,7 @@ else
     RUNNER_NAME=$(hostname)
 fi
 
- ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT $HOSTNAME
+ ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT, $HOSTNAME
 # install as a service account
 
 
