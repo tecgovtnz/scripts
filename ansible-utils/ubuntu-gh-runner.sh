@@ -4,6 +4,7 @@ GITHUB_ORG_NAME=$1
 GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
+COMPUTER_NAME=$5
 
 # Install the requirements for the GitHub authentication
 pip3 install pygithub
@@ -35,7 +36,6 @@ tar xzf ./actions-runner-linux*.tar.gz
 
 # Create the runner and start the configuration experience
  export RUNNER_ALLOW_RUNASROOT=1
- export HOSTNAME
 
  if [[ "$ENVIRONMENT" == "dev" || "$ENVIRONMENT" == "dev-platform" ]]; then
     RUNNER_NAME=$(hostname)-$ENVIRONMENT
@@ -45,7 +45,7 @@ else
     RUNNER_NAME=$(hostname)
 fi
 
- ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT, $HOSTNAME
+ ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT, $COMPUTER_NAME
 # install as a service account
 
 
