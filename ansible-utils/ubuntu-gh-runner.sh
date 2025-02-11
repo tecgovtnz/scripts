@@ -35,6 +35,7 @@ tar xzf ./actions-runner-linux*.tar.gz
 
 # Create the runner and start the configuration experience
  export RUNNER_ALLOW_RUNASROOT=1
+ export HOSTNAME
 
  if [[ "$ENVIRONMENT" == "dev" || "$ENVIRONMENT" == "dev-platform" ]]; then
     RUNNER_NAME=$(hostname)-$ENVIRONMENT
