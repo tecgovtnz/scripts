@@ -71,7 +71,7 @@ sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub s
 pip install PyGithub
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
-printf 'DOCKER_OPTS="${DOCKER_OPTS} --registry-mirror=https://mirror.gcr.io"' >> /etc/default/docker
+printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
 sudo service docker restart
 
 ./svc.sh install action-runner
