@@ -4,7 +4,6 @@ GITHUB_ORG_NAME=$1
 GITHUB_APP_ID=$2
 GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
-COMPUTER_NAME=$5
 
 # Install the requirements for the GitHub authentication
 pip3 install pygithub
@@ -37,15 +36,19 @@ tar xzf ./actions-runner-linux*.tar.gz
 # Create the runner and start the configuration experience
  export RUNNER_ALLOW_RUNASROOT=1
 
- if [[ "$ENVIRONMENT" == "dev" || "$ENVIRONMENT" == "dev-platform" ]]; then
+ if [[ "$ENVIRONMENT" == "dev" || "$ENVIRONMENT" == "dev-testing" || "$ENVIRONMENT" == "dev-platform" || "$ENVIRONMENT" == "dev-platform-testing" ]]; then
     RUNNER_NAME=$(hostname)-$ENVIRONMENT
 elif [[ "$ENVIRONMENT" == "prod-platform" ]]; then
     RUNNER_NAME=$(hostname)-platform
+elif [[ "$ENVIRONMENT" == "prod-testing" ]]; then
+    RUNNER_NAME=$(hostname)-testing
+elif [[ "$ENVIRONMENT" == "prod-platform-testing" ]]; then
+    RUNNER_NAME=$(hostname)platform-testing
 else
     RUNNER_NAME=$(hostname)
 fi
 
- ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT, $COMPUTER_NAME
+ ./config.sh --url https://github.com/tecgovtnz --token $TOKEN --runasservice --name $RUNNER_NAME --work _work --runnergroup $ENVIRONMENT --labels $ENVIRONMENT,$HOSTNAME
 # install as a service account
 
 
@@ -66,6 +69,10 @@ sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub setuptools"
 pip install PyGithub
+
+# Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
+printf 'DOCKER_OPTS="${DOCKER_OPTS} --registry-mirror=https://mirror.gcr.io"' >> /etc/default/docker
+sudo service docker restart
 
 ./svc.sh install action-runner
 # Last step, run it!
