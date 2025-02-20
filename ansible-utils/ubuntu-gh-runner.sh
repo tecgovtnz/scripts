@@ -43,7 +43,7 @@ elif [[ "$ENVIRONMENT" == "prod-platform" ]]; then
 elif [[ "$ENVIRONMENT" == "prod-testing" ]]; then
     RUNNER_NAME=$(hostname)-testing
 elif [[ "$ENVIRONMENT" == "prod-platform-testing" ]]; then
-    RUNNER_NAME=$(hostname)platform-testing
+    RUNNER_NAME=$(hostname)-platform-testing
 else
     RUNNER_NAME=$(hostname)
 fi
