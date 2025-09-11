@@ -8,7 +8,7 @@ ENVIRONMENT=$4
 # Install the requirements for the GitHub authentication
 sudo apt install -y python3-pip
 sudo apt install -y python3-github
-pip3 install pygithub
+# pip3 install pygithub
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
