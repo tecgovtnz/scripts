@@ -6,6 +6,7 @@ GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
+sudo apt update
 sudo apt install -y python3-pip
 sudo apt install -y python3-github
 # pip3 install pygithub
