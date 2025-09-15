@@ -26,6 +26,9 @@ TOKEN=$(echo "$response" | jq -r '.token')
 #create directory
 mkdir /opt/runner-cache
 
+#change directory
+cd /opt/runner-cache
+
 #download latest release
 curl -s https://api.github.com/repos/actions/runner/releases/latest | grep browser_download_url | grep 'actions-runner-linux-x64' | head -n 1 | cut -d '"' -f 4 | wget -i -
 
@@ -33,8 +36,6 @@ curl -s https://api.github.com/repos/actions/runner/releases/latest | grep brows
 tar xzf ./actions-runner-linux-x64-*.*.*.tar.gz
 
 # Install Github runner agent
-cd /opt/runner-cache
-
 useradd -d /opt/runner-cache action-runner
 usermod -aG sudo action-runner
 chown action-runner /opt/runner-cache --recursive
