@@ -11,15 +11,6 @@ sudo apt install -y python3-pip
 sudo apt install -y python3-github
 # pip3 install pygithub
 
-#create directory
-mkdir /opt/runner-cache
-
-#download latest release
-curl -s https://api.github.com/repos/actions/runner/releases/latest | grep browser_download_url | grep 'actions-runner-linux-x64' | head -n 1 | cut -d '"' -f 4 | wget -i -
-
-#extract release
-tar xzf ./actions-runner-linux-x64-*.*.*.tar.gz
-
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
 ACCESS_TOKEN=$(python3 github_app_token.py -o $GITHUB_ORG_NAME -a $GITHUB_APP_ID -p "$GITHUB_APP_PRIVATE_KEY")
@@ -32,6 +23,14 @@ response=$(curl -X POST \
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
 
+#create directory
+mkdir /opt/runner-cache
+
+#download latest release
+curl -s https://api.github.com/repos/actions/runner/releases/latest | grep browser_download_url | grep 'actions-runner-linux-x64' | head -n 1 | cut -d '"' -f 4 | wget -i -
+
+#extract release
+tar xzf ./actions-runner-linux-x64-*.*.*.tar.gz
 
 # Install Github runner agent
 cd /opt/runner-cache
