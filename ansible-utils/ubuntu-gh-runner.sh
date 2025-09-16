@@ -9,7 +9,28 @@ ENVIRONMENT=$4
 sudo apt update
 sudo apt install -y python3-pip
 sudo apt install -y python3-github
+sudo apt install -y docker.io
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
 # pip3 install pygithub
+
+# AZ CLI install
+sudo mkdir -p /etc/apt/keyrings
+curl -sLS https://packages.microsoft.com/keys/microsoft.asc |
+  gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
+
+AZ_DIST=$(lsb_release -cs)
+echo "Types: deb
+URIs: https://packages.microsoft.com/repos/azure-cli/
+Suites: ${AZ_DIST}
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/azure-cli.sources
+
+sudo apt-get -y update
+sudo apt-get -y install azure-cli
+
+sudo apt install -y pipx ansible-core
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
