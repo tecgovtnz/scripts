@@ -98,10 +98,11 @@ echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner
 # Install ansible collections and requirements
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/ansible/windows") # Delete existing windows collection
+sudo su - action-runner -c "pipx install ansible-core"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==2.4.0 azure.azcollection:==2.3.0" # Pin older collection versions
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub setuptools"
-pip install PyGithub
+# pip install PyGithub
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
 printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
