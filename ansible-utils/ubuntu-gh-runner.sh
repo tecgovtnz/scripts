@@ -6,12 +6,8 @@ GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
-sudo apt update
-sudo apt install -y python3-pip
-sudo apt install -y python3-github
-sudo apt install -y docker.io
-sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
-# pip3 install pygithub
+sudo apt-get update
+sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core
 
 # AZ CLI install
 sudo mkdir -p /etc/apt/keyrings
@@ -29,8 +25,6 @@ Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/a
 
 sudo apt-get -y update
 sudo apt-get -y install azure-cli
-
-sudo apt install -y pipx ansible-core
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -102,7 +96,6 @@ sudo su - action-runner -c "pipx install ansible-core"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==2.4.0 azure.azcollection:==2.3.0" # Pin older collection versions
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub setuptools"
-# pip install PyGithub
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
 printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
