@@ -6,25 +6,7 @@ GITHUB_APP_PRIVATE_KEY_ENCODED=$3
 ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
-sudo apt-get update
-sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core
-
-# AZ CLI install
-sudo mkdir -p /etc/apt/keyrings
-curl -sLS https://packages.microsoft.com/keys/microsoft.asc |
-  gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
-sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
-
-AZ_DIST=$(lsb_release -cs)
-echo "Types: deb
-URIs: https://packages.microsoft.com/repos/azure-cli/
-Suites: ${AZ_DIST}
-Components: main
-Architectures: $(dpkg --print-architecture)
-Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/azure-cli.sources
-
-sudo apt-get -y update
-sudo apt-get -y install azure-cli
+pip3 install pygithub
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
@@ -38,19 +20,10 @@ response=$(curl -X POST \
 # Extract the token from the response
 TOKEN=$(echo "$response" | jq -r '.token')
 
-#create directory
-mkdir /opt/runner-cache
-
-#change directory
-cd /opt/runner-cache
-
-#download latest release
-curl -s https://api.github.com/repos/actions/runner/releases/latest | grep browser_download_url | grep 'actions-runner-linux-x64' | head -n 1 | cut -d '"' -f 4 | wget -i -
-
-#extract release
-tar xzf ./actions-runner-linux-x64-*.*.*.tar.gz
 
 # Install Github runner agent
+cd /opt/runner-cache
+
 useradd -d /opt/runner-cache action-runner
 usermod -aG sudo action-runner
 chown action-runner /opt/runner-cache --recursive
@@ -92,10 +65,10 @@ echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner
 # Install ansible collections and requirements
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/ansible/windows") # Delete existing windows collection
-sudo su - action-runner -c "pipx install ansible-core"
 sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==2.4.0 azure.azcollection:==2.3.0" # Pin older collection versions
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
 sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub setuptools"
+pip install PyGithub
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
 printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
