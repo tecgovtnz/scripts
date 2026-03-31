@@ -86,8 +86,18 @@ chgrp action-runner /opt/runner-cache --recursive
 # Add runner user to docker group
 sudo usermod -aG docker action-runner
 
+# Ensure setup-dotnet installs into a writable location for the runner service account.
+mkdir -p /opt/runner-cache/.dotnet
+chown action-runner /opt/runner-cache/.dotnet --recursive
+chgrp action-runner /opt/runner-cache/.dotnet --recursive
+
+cat <<EOF > /opt/runner-cache/.env
+DOTNET_INSTALL_DIR=/opt/runner-cache/.dotnet
+DOTNET_ROOT=/opt/runner-cache/.dotnet
+EOF
+
 #set path for action-runner user
-echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
+echo '/opt/runner-cache/.dotnet:/opt/runner-cache/.dotnet/tools:/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
 # Install ansible collections and requirements
 sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
