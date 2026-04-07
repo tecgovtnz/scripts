@@ -91,9 +91,16 @@ mkdir -p /opt/runner-cache/.dotnet
 chown action-runner /opt/runner-cache/.dotnet --recursive
 chgrp action-runner /opt/runner-cache/.dotnet --recursive
 
+# Ensure GitHub Actions tool cache is writable for setup-* actions.
+mkdir -p /opt/runner-cache/_tool
+chown action-runner /opt/runner-cache/_tool --recursive
+chgrp action-runner /opt/runner-cache/_tool --recursive
+
 cat <<EOF > /opt/runner-cache/.env
 DOTNET_INSTALL_DIR=/opt/runner-cache/.dotnet
 DOTNET_ROOT=/opt/runner-cache/.dotnet
+RUNNER_TOOL_CACHE=/opt/runner-cache/_tool
+AGENT_TOOLSDIRECTORY=/opt/runner-cache/_tool
 EOF
 
 #set path for action-runner user
@@ -112,6 +119,22 @@ printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/d
 sudo service docker restart
 
 ./svc.sh install action-runner
+
+# Add environment overrides at the service level so setup-dotnet never defaults to /usr/share/dotnet.
+SERVICE_FILE=$(ls /etc/systemd/system/actions.runner.*.service 2>/dev/null | head -n 1)
+if [ -n "$SERVICE_FILE" ]; then
+    SERVICE_NAME=$(basename "$SERVICE_FILE")
+    sudo mkdir -p "/etc/systemd/system/${SERVICE_NAME}.d"
+    cat <<EOF | sudo tee "/etc/systemd/system/${SERVICE_NAME}.d/override.conf" > /dev/null
+[Service]
+Environment="DOTNET_INSTALL_DIR=/opt/runner-cache/.dotnet"
+Environment="DOTNET_ROOT=/opt/runner-cache/.dotnet"
+Environment="RUNNER_TOOL_CACHE=/opt/runner-cache/_tool"
+Environment="AGENT_TOOLSDIRECTORY=/opt/runner-cache/_tool"
+EOF
+    sudo systemctl daemon-reload
+fi
+
 # Last step, run it!
 ./svc.sh start
 ./svc.sh status
