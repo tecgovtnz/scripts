@@ -9,10 +9,16 @@ ENVIRONMENT=$4
 sudo apt-get update
 sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core
 
+# Install PowerShell (pwsh)
+wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+sudo apt-get install -y powershell 
+rm packages-microsoft-prod.deb
+
 # AZ CLI install
 sudo mkdir -p /etc/apt/keyrings
-curl -sLS https://packages.microsoft.com/keys/microsoft.asc |
-  gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
 sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
 
 AZ_DIST=$(lsb_release -cs)
@@ -23,7 +29,8 @@ Components: main
 Architectures: $(dpkg --print-architecture)
 Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/azure-cli.sources
 
-sudo apt-get -y update
+# Install the Azure CLI
+sudo apt-get update
 sudo apt-get -y install azure-cli
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
