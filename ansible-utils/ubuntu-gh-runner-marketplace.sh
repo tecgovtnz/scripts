@@ -7,7 +7,7 @@ ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
 sudo apt-get update
-sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core
+sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core zip unzip 
 
 # AZ CLI install
 sudo mkdir -p /etc/apt/keyrings
@@ -15,16 +15,26 @@ curl -sLS https://packages.microsoft.com/keys/microsoft.asc |
   gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
 sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
 
-AZ_DIST=$(lsb_release -cs)
+source /etc/os-release
+# AZ_DIST=$(lsb_release -cs)
 echo "Types: deb
 URIs: https://packages.microsoft.com/repos/azure-cli/
-Suites: ${AZ_DIST}
+Suites: ${VERSION_CODENAME}
 Components: main
 Architectures: $(dpkg --print-architecture)
 Signed-by: /etc/apt/keyrings/microsoft.gpg" | sudo tee /etc/apt/sources.list.d/azure-cli.sources
 
+wget -q "https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb" -O /tmp/packages-microsoft-prod.deb
+sudo dpkg -i /tmp/packages-microsoft-prod.deb
+rm -f /tmp/packages-microsoft-prod.deb
+
 sudo apt-get -y update
-sudo apt-get -y install azure-cli
+sudo apt-get -y install azure-cli powershell
+
+# sudo apt-get -y update
+# sudo apt-get -y install 
+
+# Install Powershell
 
 GITHUB_APP_PRIVATE_KEY=$(echo $GITHUB_APP_PRIVATE_KEY_ENCODED | base64 --decode) 
 # Generate the github runner registration token 
