@@ -29,7 +29,10 @@ sudo dpkg -i /tmp/packages-microsoft-prod.deb
 rm -f /tmp/packages-microsoft-prod.deb
 
 sudo apt-get -y update
-sudo apt-get -y install azure-cli powershell
+sudo apt-get -y install azure-cli powershell gh
+
+# Install Az PowerShell module for all users
+sudo pwsh -NoLogo -NoProfile -Command "Install-PSResource -Name Az -Repository PSGallery -TrustRepository -Scope AllUsers"
 
 # sudo apt-get -y update
 # sudo apt-get -y install 
