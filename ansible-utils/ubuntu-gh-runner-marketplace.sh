@@ -103,10 +103,13 @@ sudo usermod -aG docker action-runner
 echo '/snap/bin:/opt/runner-cache/.local/bin:/opt/pipx_bin:/opt/runner-cache/.cargo/bin:/opt/runner-cache/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/opt/runner-cache/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
 # Install ansible collections and requirements (current versions)
-sudo su - action-runner -c "pipx install ansible-core"
-sudo su - action-runner -c "ansible-galaxy collection install ansible.windows azure.azcollection --force"
-sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
-sudo su - action-runner -c "pipx inject ansible-core azure-cli pywinrm jmespath pygithub setuptools"
+# ansible-galaxy/pipx shims live in ~/.local/bin which isn't on PATH for a plain login shell, so export .path first or these fail silently
+# pinned <2.20 since target VMs run Python 3.8, which ansible-core dropped support for starting in 2.20
+sudo su - action-runner -c "pipx install 'ansible-core<2.20'"
+sudo su - action-runner -c 'export PATH="$(cat /opt/runner-cache/.path):$PATH"; ansible-galaxy collection install ansible.windows azure.azcollection ansible.posix community.general --force'
+sudo su - action-runner -c "/opt/runner-cache/.local/share/pipx/venvs/ansible-core/bin/python3 -m pip install -r /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt"
+# auth_source: cli in azure.azcollection requires azure-cli-core importable in the same venv (not the full azure-cli metapackage, which conflicts with the collection's pinned SDK deps)
+sudo su - action-runner -c "pipx inject ansible-core azure-cli-core pywinrm jmespath pygithub setuptools"
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
 printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
