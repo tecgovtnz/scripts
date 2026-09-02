@@ -99,8 +99,8 @@ chgrp action-runner /opt/runner-cache --recursive
 # Add runner user to docker group
 sudo usermod -aG docker action-runner
 
-#set path for action-runner user
-echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
+#set path for action-runner user - must match the useradd -d home dir (/opt/runner-cache), not the default /home/action-runner
+echo '/snap/bin:/opt/runner-cache/.local/bin:/opt/pipx_bin:/opt/runner-cache/.cargo/bin:/opt/runner-cache/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/opt/runner-cache/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
 # Install ansible collections and requirements (current versions)
 sudo su - action-runner -c "pipx install ansible-core"
