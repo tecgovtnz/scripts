@@ -7,7 +7,7 @@ ENVIRONMENT=$4
 
 # Install the requirements for the GitHub authentication
 sudo apt-get update
-sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx ansible-core zip unzip 
+sudo apt-get install -y python3-pip python3-github docker.io apt-transport-https ca-certificates curl gnupg lsb-release pipx zip unzip 
 
 # AZ CLI install
 sudo mkdir -p /etc/apt/keyrings
@@ -102,13 +102,11 @@ sudo usermod -aG docker action-runner
 #set path for action-runner user
 echo '/snap/bin:/home/action-runner/.local/bin:/opt/pipx_bin:/home/action-runner/.cargo/bin:/home/action-runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/action-runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin' > /opt/runner-cache/.path
 
-# Install ansible collections and requirements
-sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/azure") # Delete existing azure collection
-sudo rm -rf $(echo "/opt/pipx/venvs/ansible-core/lib/python3.1"*"/site-packages/ansible_collections/ansible/windows") # Delete existing windows collection
+# Install ansible collections and requirements (current versions)
 sudo su - action-runner -c "pipx install ansible-core"
-sudo su - action-runner -c "ansible-galaxy collection install ansible.windows:==2.4.0 azure.azcollection:==2.3.0" # Pin older collection versions
+sudo su - action-runner -c "ansible-galaxy collection install ansible.windows azure.azcollection --force"
 sudo su - action-runner -c "cat /opt/runner-cache/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt | sed -e 's/#.*//' | xargs pipx inject ansible-core"
-sudo su - action-runner -c "pipx inject ansible-core pywinrm jmespath pygithub setuptools"
+sudo su - action-runner -c "pipx inject ansible-core azure-cli pywinrm jmespath pygithub setuptools"
 
 # Set docker registry mirror 'https://cloud.google.com/artifact-registry/docs/pull-cached-dockerhub-images#cli'
 printf '{\n  "registry-mirrors": ["https://mirror.gcr.io"]\n}\n' > /etc/docker/daemon.json
